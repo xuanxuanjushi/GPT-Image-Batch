@@ -6,6 +6,8 @@
 >
 > A small local web app that calls image-generation APIs in batches. Point it at OpenAI or any compatible proxy, load several reference images, and it generates the results in one run.
 
+> 关键词：批量生图、GPT 画图、参考图、API 代理、本地网页 / Keywords: batch image generation, gpt-image, reference images, OpenAI API, local web app
+
 [简体中文](#安全提醒) | [English](#english)
 
 ## 安全提醒
