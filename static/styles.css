@@ -1,0 +1,166 @@
+@import url("/static/shared/theme.css");
+@import url("/static/shared/components.css");
+@import url("/static/modules/image.css");
+@import url("/static/modules/product.css");
+@import url("/static/modules/chat.css");
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr);
+  gap: 8px;
+  width: min(1400px, calc(100% - 32px));
+  margin: 28px auto 56px;
+}
+
+.side-nav {
+  position: sticky;
+  top: 28px;
+  align-self: start;
+  justify-self: start;
+  display: grid;
+  gap: 10px;
+  width: 62px;
+  padding: 9px;
+  border: 1px solid rgba(255, 122, 26, 0.18);
+  border-radius: 22px;
+  background: rgba(255, 250, 244, 0.72);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+  z-index: 5;
+}
+
+.nav-group {
+  display: grid;
+  gap: 10px;
+}
+
+.nav-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--orange-dark);
+  font-weight: 900;
+  box-shadow: none;
+}
+
+.nav-button::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 122, 26, 0.2);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  z-index: 20;
+}
+
+.nav-button:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.nav-button.active {
+  border-color: rgba(255, 122, 26, 0.38);
+  background:
+    linear-gradient(135deg, rgba(255, 122, 26, 0.18), rgba(255, 179, 107, 0.12));
+  color: var(--orange);
+  box-shadow: 0 10px 22px rgba(255, 122, 26, 0.16);
+}
+
+.nav-button:hover {
+  background: rgba(255, 122, 26, 0.1);
+  color: var(--orange);
+}
+
+.nav-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 0;
+  line-height: 1;
+}
+
+.nav-button[data-module="image"]::after {
+  content: "生图";
+}
+
+.nav-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  stroke-width: 2.15;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.module-panel {
+  display: none;
+}
+
+.module-panel.active {
+  display: block;
+}
+
+body[data-theme="dark"] .nav-button {
+  border-color: transparent;
+  background: transparent;
+  color: #ffb36b;
+}
+
+body[data-theme="dark"] .side-nav {
+  border-color: rgba(255, 138, 43, 0.2);
+  background: rgba(17, 23, 35, 0.9);
+}
+
+body[data-theme="dark"] .nav-button.active {
+  border-color: rgba(255, 138, 43, 0.34);
+  background:
+    linear-gradient(135deg, rgba(255, 138, 43, 0.18), rgba(69, 213, 255, 0.08));
+  color: #ff8a2b;
+  box-shadow: 0 12px 24px rgba(255, 106, 0, 0.16);
+}
+
+body[data-theme="dark"] .nav-button:hover {
+  background: rgba(255, 138, 43, 0.1);
+}
+
+@media (max-width: 940px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .side-nav {
+    position: static;
+    justify-self: stretch;
+    grid-template-columns: repeat(3, 44px);
+    width: auto;
+    border-radius: 18px;
+  }
+
+  .nav-group {
+    grid-auto-flow: column;
+  }
+
+  .nav-button::after {
+    display: none;
+  }
+}

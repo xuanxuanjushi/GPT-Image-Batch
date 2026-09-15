@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPU 芯片关注度动画</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --blue: #ef4444;
+      --text: #1f2933;
+      --muted: #59636f;
+      --grid: #e7ebf0;
+      --axis: #edf0f4;
+      --card: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+    }
+
+    .chart-wrap {
+      width: min(92vw, 760px);
+      aspect-ratio: 2.15 / 1;
+      padding: 24px 18px 18px;
+    }
+
+    .chart {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .axis {
+      stroke: var(--axis);
+      stroke-width: 1;
+    }
+
+    .grid {
+      stroke: var(--grid);
+      stroke-width: 1;
+      stroke-dasharray: 3 4;
+    }
+
+    .label {
+      fill: var(--muted);
+      font-size: 13px;
+    }
+
+    .bar {
+      fill: var(--blue);
+      opacity: .92;
+      rx: 5;
+      ry: 5;
+      transform-box: fill-box;
+      transform-origin: bottom;
+      transform: scaleY(0);
+      animation: growBar 10s cubic-bezier(.22, .8, .28, 1) forwards;
+    }
+
+    .bar:nth-of-type(1) { animation-duration: 3.8s; }
+    .bar:nth-of-type(2) { animation-duration: 5.2s; }
+    .bar:nth-of-type(3) { animation-duration: 6.8s; }
+    .bar:nth-of-type(4) { animation-duration: 8.4s; }
+    .bar:nth-of-type(5) { animation-duration: 10s; }
+
+    .drop-bar {
+      animation: growAndDrop 10s cubic-bezier(.22, .8, .28, 1) forwards;
+    }
+
+    .tooltip {
+      position: absolute;
+      left: calc(7.78% + 52px);
+      top: 12%;
+      min-width: 132px;
+      padding: 12px 13px;
+      border: 1px solid #dfe5ec;
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: 0 12px 28px rgba(31, 41, 51, .12);
+      opacity: 0;
+      transform: translateY(8px);
+      animation: showTip .55s ease-out .35s forwards;
+    }
+
+    .tooltip-title {
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .tooltip-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #111827;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .tooltip-value {
+      margin-left: 10px;
+    }
+
+    @keyframes growBar {
+      to {
+        transform: scaleY(1);
+      }
+    }
+
+    @keyframes growAndDrop {
+      0% {
+        fill: var(--blue);
+        transform: scaleY(0);
+      }
+
+      50% {
+        fill: var(--blue);
+        transform: scaleY(1);
+      }
+
+      52% {
+        fill: #3b82f6;
+        transform: scaleY(1);
+      }
+
+      100% {
+        fill: #3b82f6;
+        transform: scaleY(.72);
+      }
+    }
+
+    @keyframes showTip {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .chart-wrap {
+        width: 96vw;
+        padding: 14px 8px 10px;
+      }
+
+      .label {
+        font-size: 11px;
+      }
+
+      .tooltip {
+        left: 10%;
+        top: 10%;
+        min-width: 118px;
+        padding: 10px 11px;
+      }
+
+      .tooltip-title {
+        font-size: 13px;
+      }
+
+      .tooltip-row {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="chart-wrap" aria-label="GPU 芯片关注度折线动画">
+    <section class="chart">
+      <svg viewBox="0 0 720 360" role="img" aria-labelledby="chartTitle chartDesc">
+        <title id="chartTitle">GPU 芯片关注度趋势</title>
+        <desc id="chartDesc">横轴包含 GPU 芯片、服务器、光模块、数据中心、电力与散热，折线从 100 上升到 262。</desc>
+
+        <line class="axis" x1="56" y1="26" x2="56" y2="315"></line>
+        <line class="axis" x1="56" y1="315" x2="690" y2="315"></line>
+
+        <line class="grid" x1="56" y1="26" x2="690" y2="26"></line>
+        <line class="grid" x1="56" y1="99" x2="690" y2="99"></line>
+        <line class="grid" x1="56" y1="171" x2="690" y2="171"></line>
+        <line class="grid" x1="56" y1="244" x2="690" y2="244"></line>
+        <line class="grid" x1="56" y1="315" x2="690" y2="315"></line>
+
+        <text class="label" x="15" y="30">275</text>
+        <text class="label" x="15" y="103">220</text>
+        <text class="label" x="15" y="175">165</text>
+        <text class="label" x="15" y="248">110</text>
+        <text class="label" x="15" y="319">55</text>
+
+        <text class="label" text-anchor="middle" x="56" y="338">GPU芯片</text>
+        <text class="label" text-anchor="middle" x="216" y="338">服务器</text>
+        <text class="label" text-anchor="middle" x="376" y="338">光模块</text>
+        <text class="label" text-anchor="middle" x="536" y="338">数据中心</text>
+        <text class="label" text-anchor="middle" x="690" y="338">电力与散热</text>
+
+        <rect class="bar" x="44" y="257" width="24" height="58"></rect>
+        <rect class="bar" x="204" y="219" width="24" height="96"></rect>
+        <rect class="bar" x="364" y="157" width="24" height="158"></rect>
+        <rect class="bar" x="524" y="106" width="24" height="209"></rect>
+        <rect class="bar drop-bar" x="678" y="50" width="24" height="265"></rect>
+      </svg>
+
+      <aside class="tooltip" aria-label="GPU 芯片关注度 100">
+        <div class="tooltip-title">GPU芯片</div>
+        <div class="tooltip-row">
+          <span class="dot" aria-hidden="true"></span>
+          <span>关注度</span>
+          <span class="tooltip-value">100</span>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

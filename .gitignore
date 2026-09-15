@@ -1,0 +1,20 @@
+# 密钥与个人配置（绝对不能上传）
+config.json
+API config .csv
+*.env
+
+# 运行产物
+__pycache__/
+*.pyc
+*.pyo
+
+# 生成结果与上传的参考图
+outputs/
+uploads/
+test-results/
+
+# 日志与本机临时文件
+*.log
+*.bak
+Thumbs.db
+desktop.ini

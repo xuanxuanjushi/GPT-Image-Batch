@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>智领未来AI生图魔法站</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="side-nav" aria-label="模块导航">
+        <button class="nav-button active" type="button" data-module="image" aria-label="生图" title="生图">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.2 6.2L20 10.5l-5.8 2.3L12 19l-2.2-6.2L4 10.5l5.8-2.3z"/><path d="M19 3l.8 2.2L22 6l-2.2.8L19 9l-.8-2.2L16 6l2.2-.8z"/><path d="M5 16l.7 1.8L7.5 18.5l-1.8.7L5 21l-.7-1.8-1.8-.7 1.8-.7z"/></svg>
+          </span>
+        </button>
+        <button class="nav-button" type="button" data-module="product" data-label="产品分析" aria-label="产品分析" title="产品分析">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 7l8-4 8 4-8 4-8-4z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg>
+          </span>
+        </button>
+        <button class="nav-button" type="button" data-module="chat" data-label="聊天" aria-label="聊天" title="聊天">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 2 1.6-4A8 8 0 1 1 21 12z"/><path d="M8 11h8"/><path d="M8 15h5"/></svg>
+          </span>
+        </button>
+      </nav>
+
+      <section class="module-panel active" id="imageModule" data-module-panel="image">
+      <div class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Local AI Image Studio</p>
+          <h1>智领未来AI生图魔法站</h1>
+          <p class="hero-copy">轩轩居士杨博敏版权所有</p>
+        </div>
+        <div class="hero-actions">
+          <button class="theme-toggle" type="button" id="themeToggle" aria-label="切换暗色模式">暗色模式</button>
+          <button class="settings-button" type="button" id="openSettings">系统设置</button>
+        </div>
+      </header>
+
+      <section class="alert">
+        <strong>安全提醒</strong>
+        <span>公开发过的 API Key 请作废重置。配置只保存在本机，不要分享 config.json。</span>
+      </section>
+
+      <section class="studio-grid">
+        <form id="taskForm" class="panel composer">
+          <div class="section-head">
+            <span>01</span>
+            <div>
+              <h2>创作任务</h2>
+              <p>先选模式，再写提示词和尺寸。</p>
+            </div>
+          </div>
+
+          <div class="mode-switch" role="tablist">
+            <button class="mode active" type="button" data-mode="text">文生图</button>
+            <button class="mode" type="button" data-mode="edit">图生图 / 改图</button>
+          </div>
+          <input type="hidden" name="mode" id="mode" value="text" />
+
+          <input type="hidden" name="task_name" id="taskName" value="商品图任务" />
+
+          <div class="upload-block hidden" id="uploadBlock">
+            <div class="upload-title">
+              <div>
+                <h3>参考图</h3>
+                <p>角标代表顺序；多图会一起作为参考内容。</p>
+              </div>
+            </div>
+            <label class="drop-zone" id="dropZone">
+              <input name="files" id="files" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+              <div class="drop-empty" id="dropEmpty">
+                <span class="plus">+</span>
+                <strong>添加参考图片</strong>
+                <small>支持 PNG、JPG、WEBP，可拖拽多张</small>
+              </div>
+              <div class="thumb-grid in-drop" id="fileList"></div>
+            </label>
+          </div>
+
+          <label>
+            提示词
+            <textarea name="prompt" id="prompt" rows="5" placeholder="例如：生成现代电商主图，产品清晰，柔和棚拍光，干净背景，高级质感；需要一次生成多张时，可写成 {多场景使用图提示词}{产品细节特写提示词}{结构爆炸图提示词}"></textarea>
+          </label>
+
+          <div class="option-grid">
+            <label>
+              尺寸
+              <select name="size" id="size">
+                <option value="1024x1024">1024 × 1024</option>
+                <option value="1600x1600">1600 × 1600</option>
+                <option value="1580x2000">1580 × 2000</option>
+                <option value="1464x600">1464 × 600</option>
+                <option value="1200x900">1200 × 900</option>
+                <option value="1200x628">1200 × 628</option>
+                <option value="1920x1080">1920 × 1080</option>
+                <option value="2048x2048">2048 × 2048</option>
+                <option value="custom">自定义尺寸</option>
+              </select>
+            </label>
+            <label>
+              质量
+              <select name="quality" id="quality">
+                <option value="auto">自动</option>
+                <option value="low">低</option>
+                <option value="medium">中</option>
+                <option value="high">高</option>
+              </select>
+            </label>
+            <label>
+              格式
+              <select name="output_format" id="outputFormat">
+                <option value="png">PNG</option>
+                <option value="jpeg">JPG</option>
+                <option value="webp">WEBP</option>
+              </select>
+            </label>
+            <label>
+              生成数量
+              <input name="images_per_reference" id="imagesPerReference" type="number" min="1" max="4" value="1" />
+            </label>
+          </div>
+
+          <div class="custom-size hidden" id="customSize">
+            <label>
+              宽度
+              <input name="custom_width" id="customWidth" type="number" min="256" max="4096" step="64" value="1024" />
+            </label>
+            <label>
+              高度
+              <input name="custom_height" id="customHeight" type="number" min="256" max="4096" step="64" value="1024" />
+            </label>
+          </div>
+
+          <input name="primary_index" id="primaryIndex" type="hidden" value="1" />
+
+          <button class="primary" type="submit" id="startBtn">开始生成</button>
+        </form>
+
+        <aside class="panel reverse-panel">
+          <div class="section-head">
+            <span>02</span>
+            <div>
+              <h2>反推提示词</h2>
+              <p>上传一张图，输出中文和英文提示词。</p>
+            </div>
+            <button class="mini-tool" type="button" id="reverseSettingsBtn">⚙</button>
+          </div>
+          <label class="reverse-drop">
+            <input id="reverseImage" type="file" accept="image/png,image/jpeg,image/webp" />
+            <div class="reverse-empty" id="reverseEmpty">
+              <span class="plus">+</span>
+              <strong>选择要反推的图片</strong>
+            </div>
+            <div class="reverse-preview hidden" id="reversePreview"></div>
+          </label>
+          <button class="ghost full" type="button" id="reverseBtn">反推中文和英文提示词</button>
+          <label>
+            中文提示词
+            <div class="prompt-output" id="zhPrompt"></div>
+          </label>
+          <label>
+            English Prompt
+            <div class="prompt-output" id="enPrompt"></div>
+          </label>
+          <div class="prompt-actions">
+            <button class="ghost" type="button" id="useZhPrompt">使用中文</button>
+            <button class="ghost" type="button" id="useEnPrompt">使用英文</button>
+          </div>
+          <div class="status-line" id="reverseStatus"></div>
+        </aside>
+      </section>
+
+      <section class="panel progress-panel">
+        <div class="section-head row">
+          <div>
+            <span>03</span>
+            <div>
+              <h2>进度与结果</h2>
+              <p>结果图可以一键发送到图生图继续修改。</p>
+            </div>
+          </div>
+          <button class="ghost hidden" type="button" id="openOutput">打开输出目录</button>
+        </div>
+        <div class="progress-bar"><span id="progressFill"></span></div>
+        <div class="task-status" id="taskStatus">还没有任务</div>
+        <div class="task-items" id="taskItems"></div>
+        <div class="results" id="results"></div>
+      </section>
+      </div>
+      </section>
+
+      <section class="module-panel" id="productModule" data-module-panel="product">
+        <div class="product-shell">
+          <header class="product-hero panel">
+            <div>
+              <p class="eyebrow">Product Intelligence</p>
+              <h1>产品分析与亚马逊文案</h1>
+              <p>上传产品图，提炼卖点、目标人群、使用场景，再生成可发送到生图模块的提示词和文案。</p>
+            </div>
+          </header>
+
+          <section class="product-grid">
+            <form class="panel product-card" id="productForm">
+              <div class="section-head">
+                <span>01</span>
+                <div>
+                  <h2>产品素材</h2>
+                  <p>支持点击、拖拽、粘贴上传多张图片。</p>
+                </div>
+              </div>
+
+              <label>
+                产品名称
+                <input id="productName" name="product_name" placeholder="例如：儿童泳镜 / 厨房收纳架 / 便携榨汁杯" />
+              </label>
+
+              <label class="product-drop" id="productDrop">
+                <input id="productImages" name="images" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+                <div class="product-empty" id="productEmpty">
+                  <span class="plus">+</span>
+                  <strong>添加产品图片</strong>
+                  <small>可点击、拖拽，也可以把剪贴板图片粘贴到这里</small>
+                </div>
+                <div class="product-thumbs" id="productThumbs"></div>
+              </label>
+
+              <label>
+                补充要求（可选）
+                <textarea id="productRequirements" name="requirements" rows="5" placeholder="例如：面向美国亚马逊，突出安全、耐用、礼品属性，语气专业但有购买欲。"></textarea>
+              </label>
+
+              <div class="product-actions">
+                <button class="primary" type="button" id="analyzeProductBtn">分析产品卖点</button>
+                <button class="ghost" type="button" id="generateCopyBtn">生成亚马逊文案</button>
+              </div>
+              <div class="status-line" id="productStatus"></div>
+            </form>
+
+            <section class="panel product-card">
+              <div class="section-head">
+                <span>02</span>
+                <div>
+                  <h2>分析结果</h2>
+                  <p>结果会保存到共享状态，后续模块可以继续使用。</p>
+                </div>
+              </div>
+              <div class="product-output" id="analysisOutput">还没有分析结果。</div>
+            </section>
+          </section>
+
+          <section class="panel product-card">
+            <div class="section-head row">
+              <div>
+                <span>03</span>
+                <div>
+                  <h2>文案与生图提示词</h2>
+                  <p>生成后可以直接复制使用，也可以发送到图片策划。</p>
+                </div>
+              </div>
+              <div class="copy-head-actions">
+                <button class="ghost small" type="button" id="sendImagePlanBtn">发送到图片策划</button>
+                <button class="mini-tool" type="button" id="copySettingsBtn" aria-label="文案设置">⚙</button>
+              </div>
+            </div>
+            <div class="copy-grid" id="copywritingOutput">
+              <div class="copy-placeholder">还没有文案。先分析产品，再生成亚马逊文案。</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="module-panel" id="chatModule" data-module-panel="chat">
+        <div class="chat-shell panel">
+          <div class="section-head">
+            <span>01</span>
+            <div>
+              <p class="chat-eyebrow">AI Chat Assistant</p>
+              <h2>聊天助手</h2>
+              <p>纯文字使用聊天配置，带图片时自动使用视觉理解配置。</p>
+            </div>
+          </div>
+          <div class="chat-messages" id="chatMessages" aria-live="polite">
+            <div class="chat-empty">还没有消息。可以输入文字，也可以上传或粘贴图片一起发送。</div>
+          </div>
+          <div class="chat-composer">
+            <div class="chat-input-row">
+              <label class="ghost chat-upload" title="添加图片" aria-label="添加图片">
+                <input id="chatImages" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+                <span aria-hidden="true">+</span>
+              </label>
+              <div class="chat-input-stack">
+                <div class="chat-attachments hidden" id="chatAttachments"></div>
+                <textarea id="chatDraft" rows="2" placeholder="输入想法、需求或问题。带图片时会走视觉理解模型。"></textarea>
+              </div>
+              <button class="ghost" type="button" id="clearChat">清空</button>
+              <button class="primary small" type="button" id="sendChat">发送</button>
+            </div>
+            <div class="status-line" id="chatStatus"></div>
+          </div>
+          <section class="chat-planner">
+            <div class="section-head row">
+              <div>
+                <span>02</span>
+                <div>
+                  <h2>图片策划</h2>
+                  <p>把产品卖点和文案整理成可直接用于生图的详细提示词。</p>
+                </div>
+              </div>
+            </div>
+            <div class="planner-controls">
+              <label>
+                选择平台
+                <select id="plannerPlatform">
+                  <option value="amazon">亚马逊</option>
+                  <option value="walmart">沃尔玛</option>
+                  <option value="temu">Temu</option>
+                  <option value="ebay">eBay</option>
+                  <option value="etsy">Etsy</option>
+                  <option value="aliexpress">速卖通</option>
+                  <option value="tiktok_shop">TikTok Shop</option>
+                  <option value="shopee">Shopee</option>
+                  <option value="lazada">Lazada</option>
+                  <option value="shein">SHEIN</option>
+                  <option value="shopify">独立站 / Shopify</option>
+                  <option value="taobao">淘宝</option>
+                  <option value="tmall">天猫</option>
+                  <option value="jd">京东</option>
+                  <option value="pinduoduo">拼多多</option>
+                  <option value="douyin">抖音电商</option>
+                  <option value="kuaishou">快手电商</option>
+                  <option value="xiaohongshu">小红书</option>
+                  <option value="1688">1688</option>
+                </select>
+              </label>
+              <label>
+                选择风格
+                <select id="plannerStyle">
+                  <option value="tech">科技</option>
+                  <option value="home">家居</option>
+                  <option value="sport">运动</option>
+                  <option value="minimal_white">极简白底</option>
+                  <option value="premium">高端质感</option>
+                  <option value="lifestyle">生活方式</option>
+                  <option value="scenario">场景化种草</option>
+                  <option value="promo">爆款促销</option>
+                  <option value="black_friday">黑五大促</option>
+                  <option value="fresh">清新自然</option>
+                  <option value="luxury">奢华精品</option>
+                  <option value="guochao">国潮新中式</option>
+                  <option value="cute">可爱潮玩</option>
+                  <option value="industrial">工业硬核</option>
+                </select>
+              </label>
+              <label>
+                策划数量
+                <select id="plannerQuantity">
+                  <option value="1">1 张</option>
+                  <option value="2">2 张</option>
+                  <option value="3">3 张</option>
+                  <option value="4">4 张</option>
+                  <option value="5">5 张</option>
+                  <option value="6">6 张</option>
+                  <option value="7">7 张</option>
+                  <option value="8" selected>8 张</option>
+                  <option value="9">9 张</option>
+                  <option value="10">10 张</option>
+                  <option value="11">11 张</option>
+                  <option value="12">12 张</option>
+                </select>
+              </label>
+              <label>
+                策划类型
+                <select id="plannerType">
+                  <option value="main_sub">主副图</option>
+                  <option value="aplus">A+</option>
+                  <option value="brand_story">品牌故事</option>
+                  <option value="sbh_ad">SBH广告</option>
+                  <option value="package">包装设计</option>
+                </select>
+              </label>
+              <div class="planner-command-row">
+                <button class="primary small" type="button" id="startPlannerBtn">开始策划</button>
+                <button class="ghost small" type="button" id="openPlannerFormat">格式设置</button>
+              </div>
+            </div>
+            <textarea id="plannerSource" class="hidden" aria-hidden="true"></textarea>
+            <div class="planner-output-wrap">
+              <textarea id="plannerOutput" rows="9" placeholder="如果上方聊天框内有文字或产品图片，会优先使用聊天框内容开始策划；也可以从产品文案发送内容后再策划。"></textarea>
+            </div>
+            <div class="planner-actions">
+              <button class="ghost" type="button" id="sendPlanToText">发送到文生图</button>
+              <button class="ghost" type="button" id="sendPlanToEdit">发送到图生图</button>
+            </div>
+            <div class="status-line" id="plannerStatus"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+      <dialog class="small-modal planner-format-modal" id="plannerFormatModal">
+        <form method="dialog" class="small-card">
+          <div class="modal-head">
+            <div>
+              <p class="eyebrow">Prompt Format</p>
+              <h2>提示词格式</h2>
+            </div>
+            <button class="icon-button" value="cancel" type="submit">×</button>
+          </div>
+          <label>
+            每条提示词格式
+            <textarea id="plannerFormatInput" rows="8"></textarea>
+          </label>
+          <p class="settings-note">格式会用于每一条生图提示词，系统仍会自动保留花括号和图片类型。</p>
+          <div class="modal-actions">
+            <button class="ghost" type="button" id="resetPlannerFormat">恢复默认</button>
+            <button class="primary small" type="button" id="savePlannerFormat">保存格式</button>
+          </div>
+          <div class="status-line" id="plannerFormatStatus"></div>
+        </form>
+      </dialog>
+
+    <dialog class="settings-modal" id="settingsModal">
+      <form method="dialog" class="settings-card">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">System Settings</p>
+            <h2>模型配置中心</h2>
+          </div>
+          <button class="icon-button" value="cancel" type="submit">×</button>
+        </div>
+
+        <div class="settings-tabs">
+          <button class="tab active" type="button" data-tab="chat">聊天</button>
+          <button class="tab" type="button" data-tab="generation">生图</button>
+          <button class="tab" type="button" data-tab="vision">视觉识别</button>
+        </div>
+
+        <p class="settings-note">模型清单来自项目内 API config .csv；选择模型会自动填写接口来源和 Base URL。API Key 只保存在本机 config.json，请不要分享。</p>
+
+        <div class="settings-pane active" data-pane="chat">
+          <div class="settings-grid" data-section="chat"></div>
+        </div>
+        <div class="settings-pane" data-pane="generation">
+          <div class="settings-grid" data-section="generation"></div>
+        </div>
+        <div class="settings-pane" data-pane="vision">
+          <div class="settings-grid" data-section="vision"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="ghost" type="button" id="testActiveApi">测试当前配置</button>
+          <button class="ghost" type="button" id="setDefaultSettings">设为默认</button>
+          <button class="ghost" type="button" id="saveCustomModel">保存为自定义模型</button>
+          <button class="primary small" type="button" id="saveSettingsBtn">保存当前配置</button>
+        </div>
+        <div class="status-line" id="settingsStatus"></div>
+      </form>
+    </dialog>
+
+      <dialog class="small-modal" id="reverseSettingsModal">
+      <form method="dialog" class="small-card">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Reverse Prompt</p>
+            <h2>反推设置</h2>
+          </div>
+          <button class="icon-button" value="cancel" type="submit">×</button>
+        </div>
+        <label>
+          固定风格
+          <select id="reverseStyle">
+            <option value="general">通用写实</option>
+            <option value="ecommerce">电商商品图</option>
+            <option value="portrait">人像写真</option>
+            <option value="poster">海报广告</option>
+            <option value="cinematic">电影感</option>
+          </select>
+        </label>
+        <label>
+          提示词复杂度
+          <select id="reverseComplexity">
+            <option value="balanced">标准</option>
+            <option value="simple">简洁</option>
+            <option value="detailed">丰富</option>
+            <option value="expert">专业细节</option>
+          </select>
+        </label>
+        <button class="primary small" type="button" id="saveReverseSettings">保存反推设置</button>
+      </form>
+      </dialog>
+
+      <dialog class="small-modal" id="copySettingsModal">
+        <form method="dialog" class="small-card">
+          <div class="modal-head">
+            <div>
+              <p class="eyebrow">Copywriting</p>
+              <h2>文案设置</h2>
+            </div>
+            <button class="icon-button" value="cancel" type="submit">×</button>
+          </div>
+          <div class="copy-preset-list">
+            <button class="copy-preset active" type="button" data-copy-preset="standard">
+              <strong>标准</strong>
+              <span>关键词组合、5 条五点描述、10 张主副图文案、13 张 A+ 文案。</span>
+            </button>
+            <button class="copy-preset" type="button" data-copy-preset="detailed">
+              <strong>详细</strong>
+              <span>同样结构，关键词和画面细节更丰富，适合深度页面。</span>
+            </button>
+            <button class="copy-preset" type="button" data-copy-preset="concise">
+              <strong>精简</strong>
+              <span>同样结构，语言更短，适合快速出稿和后续人工改。</span>
+            </button>
+          </div>
+          <div class="modal-actions">
+            <button class="primary small" type="button" id="saveCopySettings">保存文案设置</button>
+          </div>
+          <div class="status-line" id="copySettingsStatus"></div>
+        </form>
+      </dialog>
+
+      <dialog class="preview-modal" id="imagePreviewModal">
+      <button class="preview-close" type="button" id="closeImagePreview">×</button>
+      <img id="imagePreview" alt="图片预览" />
+    </dialog>
+
+  <script type="module" src="/static/script.js?v=20260505-virtual-edit-tasks"></script>
+  </body>
+</html>
