@@ -10,6 +10,14 @@
 
 [简体中文](#安全提醒) | [English](#english)
 
+## 下载
+
+免安装便携版在 [Releases](https://github.com/xuanxuanjushi/GPT-Image-Batch/releases/latest) 页面：
+
+| 文件 | 说明 |
+| --- | --- |
+| GPT-Image-Batch-portable-v1.0.0.zip | 解压整个文件夹后双击「启动并打开浏览器.bat」，第一次使用需要在页面里填写自己的 API Key |
+
 ## 安全提醒
 
 不要把 API Key 发给别人，也不要提交到 Git。软件会把 Key 保存到本机的 `config.json`，这个文件已经加入 `.gitignore`。
